@@ -23,6 +23,6 @@ npm run build
 
 The exported site is written to the `out/` directory.
 
-The catalog currently contains clearly labeled sample products for layout
-preview. Update the product data in `app/catalog.js` with the store's actual
-catalog before publishing.
+Brand catalog PDFs are served from `public/catalogs/` and displayed in the
+Shop Now section as page-by-page galleries with thumbnails. Add new PDFs there
+and update the catalog entries in `app/catalog.js` to show them on the page.

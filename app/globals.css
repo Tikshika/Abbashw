@@ -1,4 +1,5 @@
 :root {
+  --header-height: 104px;
   --navy: #0b2a52;
   --navy-light: #174e7e;
   --orange: #f27b21;
@@ -14,6 +15,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height);
 }
 
 body {
@@ -40,7 +42,8 @@ button {
 }
 
 .site-header {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 10;
   color: #fff;
   background: var(--navy);
@@ -52,7 +55,7 @@ button {
   min-height: 104px;
   padding: 0 clamp(22px, 3.2vw, 56px);
   display: grid;
-  grid-template-columns: 165px minmax(0, 1fr) auto;
+  grid-template-columns: 165px minmax(0, 1fr);
   align-items: center;
   gap: clamp(18px, 2.2vw, 34px);
 }
@@ -241,16 +244,22 @@ h1 span {
 }
 
 .workshop-art {
-  width: 100%;
+  width: min(100%, 500px);
+  height: auto;
+  margin-left: auto;
   display: block;
-  overflow: visible;
+  border-radius: 6px;
+  box-shadow: 0 16px 38px rgba(17, 40, 67, 0.16);
 }
 
 .art-label {
   position: absolute;
-  right: 9%;
-  bottom: 8%;
-  color: #506c78;
+  right: 2%;
+  bottom: -16px;
+  padding: 8px 11px;
+  color: #fff;
+  background: var(--navy);
+  border-radius: 3px;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1.7px;
@@ -320,7 +329,7 @@ h2 span {
 .catalog-section {
   width: min(1440px, calc(100% - 72px));
   margin: 0 auto 78px;
-  scroll-margin-top: 26px;
+  scroll-margin-top: 0;
 }
 
 .catalog-heading {
@@ -910,7 +919,7 @@ h2 span {
 
 @media (max-width: 1080px) {
   .navigation {
-    grid-template-columns: 165px minmax(0, 1fr) auto;
+    grid-template-columns: 165px minmax(0, 1fr);
     gap: 17px;
   }
 
@@ -937,6 +946,10 @@ h2 span {
 }
 
 @media (max-width: 700px) {
+  :root {
+    --header-height: 84px;
+  }
+
   .navigation {
     height: auto;
     min-height: 84px;
@@ -988,8 +1001,9 @@ h2 span {
   }
 
   .art-label {
-    right: 6%;
-    bottom: 10%;
+    right: 5%;
+    bottom: -13px;
+    padding: 6px 8px;
     font-size: 7px;
   }
 
@@ -1192,4 +1206,251 @@ h2 span {
   *::after {
     transition-duration: 0.01ms !important;
   }
+}
+
+.catalog-intro {
+  margin: -8px 0 25px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.catalog-list {
+  display: grid;
+  gap: 18px;
+}
+
+.catalog-row {
+  min-width: 0;
+  overflow: hidden;
+  background: #f7f9fa;
+  border: 1px solid #e1e7eb;
+  border-radius: 7px;
+  box-shadow: 0 5px 16px rgba(17, 40, 67, 0.06);
+}
+
+.pdf-gallery {
+  min-width: 0;
+  padding: 18px;
+  display: grid;
+  grid-template-rows: minmax(300px, 1fr) auto auto;
+  gap: 12px;
+  background: linear-gradient(145deg, #eaf0f3, #f8fafb);
+}
+
+.pdf-slide {
+  min-width: 0;
+  height: clamp(280px, 40vw, 440px);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #e4eaee;
+  border: 1px solid #dfe4e8;
+  border-radius: 4px;
+}
+
+.pdf-gallery-brand {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  padding: 7px 10px;
+  color: var(--navy);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #dfe4e8;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(17, 40, 67, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pdf-page-frame {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.pdf-page-frame canvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(17, 40, 67, 0.18);
+}
+
+.pdf-page-frame.is-slide {
+  max-height: 100%;
+}
+
+.pdf-page-frame.is-slide canvas {
+  background: #e4eaee;
+  box-shadow: none;
+}
+
+.pdf-page-status {
+  position: absolute;
+  padding: 8px 10px;
+  color: #5e6e7d;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #dfe4e8;
+  border-radius: 4px;
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.pdf-page-frame.is-thumbnail .pdf-page-status {
+  padding: 4px;
+  font-size: 7px;
+}
+
+.pdf-gallery-message {
+  margin: 0;
+  padding: 16px;
+  color: #637383;
+  font-size: 12px;
+  text-align: center;
+}
+
+.pdf-gallery-message p {
+  margin-bottom: 12px;
+}
+
+.pdf-gallery-message button {
+  min-height: 36px;
+  padding: 0 13px;
+  color: #fff;
+  background: var(--navy);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pdf-gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.pdf-page-arrow {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--navy);
+  background: #fff;
+  border: 1px solid #cfd8e0;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.pdf-page-arrow:not(:disabled):hover {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.pdf-page-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pdf-page-count {
+  min-width: 100px;
+  color: #6f7e8d;
+  font-size: 11px;
+  text-align: center;
+}
+
+.pdf-page-count strong {
+  color: var(--navy);
+}
+
+.pdf-thumbnail-track {
+  min-width: 0;
+  padding: 2px 2px 7px;
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-color: #9cabb8 #e7ecef;
+  scrollbar-width: thin;
+}
+
+.pdf-thumbnail {
+  width: 86px;
+  height: 126px;
+  padding: 5px 5px 22px;
+  flex: 0 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #d4dce3;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.pdf-thumbnail:hover {
+  border-color: #8095a8;
+}
+
+.pdf-thumbnail.is-selected {
+  border: 2px solid var(--orange);
+  box-shadow: 0 0 0 2px rgba(242, 123, 33, 0.16);
+}
+
+.pdf-thumbnail:focus-visible,
+.pdf-page-arrow:focus-visible,
+.pdf-gallery-message button:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.pdf-thumbnail-number {
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  left: 0;
+  color: #647384;
+  font-size: 9px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .catalog-intro {
+    font-size: 12px;
+  }
+
+  .pdf-gallery {
+    padding: 10px;
+    grid-template-rows: minmax(280px, 1fr) auto auto;
+    gap: 9px;
+  }
+
+  .pdf-slide {
+    height: min(52svh, 400px);
+    min-height: 260px;
+  }
+
+  .pdf-thumbnail {
+    width: 74px;
+    height: 110px;
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .pdf-thumbnail-track {
+    gap: 7px;
+  }
+
+
+
 }
