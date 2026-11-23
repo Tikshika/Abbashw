@@ -1,4 +1,5 @@
 import Catalog from "./catalog";
+import NavMenu from "./nav-menu";
 
 function Icon({ name }) {
   const paths = {
@@ -30,12 +31,7 @@ export default function Home() {
       <header className="site-header">
         <nav className="navigation" aria-label="Main navigation">
           <Brand />
-          <div className="nav-links">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact Us</a>
-            <a className="nav-cta" href="#catalog">SHOP NOW</a>
-          </div>
+          <NavMenu />
         </nav>
       </header>
 
