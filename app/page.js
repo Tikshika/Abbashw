@@ -31,7 +31,10 @@ export default function Home() {
         <nav className="navigation" aria-label="Main navigation">
           <Brand />
           <div className="nav-links">
-            <a href="#catalog">SHOP NOW</a>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact Us</a>
+            <a className="nav-cta" href="#catalog">SHOP NOW</a>
           </div>
         </nav>
       </header>
@@ -77,8 +80,6 @@ export default function Home() {
 
       <footer className="footer" id="contact">
         <div className="footer-top">
-          <Brand />
-          <p>Helpful hardware for a home that works beautifully.</p>
           <a className="footer-link" href="#home">Back to top <span aria-hidden="true">↑</span></a>
         </div>
         <div className="footer-bottom">
@@ -87,16 +88,6 @@ export default function Home() {
             <a href="#contact">Contact Us</a>
             <a href="#catalog">Our Collection</a>
             <a href="#catalog">Visit a Store</a>
-          </div>
-          <div className="footer-column">
-            <a href="#contact">Returns Policy</a>
-            <a href="#contact">Privacy Policy</a>
-            <a href="#contact">Shipping &amp; Delivery</a>
-            <a href="#contact">Terms of Use</a>
-          </div>
-          <div className="footer-certifications">
-            <span>Quality you can count on</span>
-            <strong>MADE FOR EVERYDAY</strong>
           </div>
           <div className="footer-social">
             <span>Connect with us</span>
@@ -107,7 +98,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="copyright">© 2026 Abbas Hardware. All rights reserved.</div>
+        <div className="copyright">© 2026 Tikshika. All rights reserved.</div>
       </footer>
     </main>
   );
