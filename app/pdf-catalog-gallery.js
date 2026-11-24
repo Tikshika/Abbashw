@@ -101,6 +101,13 @@ function PdfPageCanvas({ pdf, pageNumber, variant, zoom = 1, pageCount = 0 }) {
         canvas.style.height = `${cssHeight}px`;
         context.drawImage(buffer, 0, 0);
 
+        if (variant === "lightbox") {
+          // Restart the fade on the same canvas so the old page stays visible until the new one is drawn.
+          canvas.style.animation = "none";
+          void canvas.offsetWidth;
+          canvas.style.animation = "";
+        }
+
         setRenderState("loaded");
 
         if (variant === "slide") {
@@ -126,7 +133,7 @@ function PdfPageCanvas({ pdf, pageNumber, variant, zoom = 1, pageCount = 0 }) {
 
   return (
     <div
-      className={`pdf-page-frame${variant === "thumbnail" ? " is-thumbnail" : ""}${variant === "slide" ? " is-slide" : ""}${variant === "lightbox" ? " is-lightbox" : ""}`}
+      className={`pdf-page-frame${variant === "thumbnail" ? " is-thumbnail" : ""}${variant === "slide" ? " is-slide" : ""}${variant === "lightbox" ? " is-lightbox" : ""}${variant === "lightbox" && zoom > 1 ? " is-zoomed" : ""}${renderState === "loaded" ? " is-ready" : ""}`}
       ref={frameRef}
     >
       <canvas
@@ -134,7 +141,7 @@ function PdfPageCanvas({ pdf, pageNumber, variant, zoom = 1, pageCount = 0 }) {
         role="img"
         aria-label={`Catalog page ${pageNumber}`}
       />
-      {renderState === "loading" && <span className="pdf-page-status">Rendering page&hellip;</span>}
+      {renderState === "loading" && variant !== "lightbox" && <span className="pdf-page-status">Rendering page&hellip;</span>}
       {renderState === "error" && <span className="pdf-page-status">Page unavailable</span>}
     </div>
   );
@@ -175,6 +182,9 @@ function PdfThumbnail({ pdf, pageNumber, selectedPage, trackRef, onSelect }) {
 
 export default function PdfCatalogGallery({ brand, file, label }) {
   const pagesPerSpread = 1;
+  const initialPageLimit = 5;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const direction = useRef("next");
   const galleryRef = useRef(null);
   const trackRef = useRef(null);
   const touchStartX = useRef(null);
@@ -184,10 +194,12 @@ export default function PdfCatalogGallery({ brand, file, label }) {
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [pdf, setPdf] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const expand = () => setIsExpanded(true);
   const [pageCount, setPageCount] = useState(0);
   const [loadState, setLoadState] = useState("idle");
   const [loadProgress, setLoadProgress] = useState(0);
   const [loadError, setLoadError] = useState("");
+  const visibleCount = isExpanded ? pageCount : Math.min(initialPageLimit, pageCount);
 
   useEffect(() => {
     const gallery = galleryRef.current;
@@ -230,7 +242,10 @@ export default function PdfCatalogGallery({ brand, file, label }) {
         if (cancelled) return;
 
         pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
-        loadingTask = pdfjs.getDocument({ url: `/catalogs/${encodeURIComponent(file)}` });
+        loadingTask = pdfjs.getDocument({
+          url: `/catalogs/${encodeURIComponent(file)}`,
+          disableAutoFetch: true
+        });
         loadingTask.onProgress = ({ loaded, total }) => {
           if (!cancelled && total > 0) {
             setLoadProgress(Math.round((loaded / total) * 100));
@@ -279,7 +294,9 @@ export default function PdfCatalogGallery({ brand, file, label }) {
   }, [loadState, pageNumber]);
 
   function showPage(nextPage) {
-    const boundedPage = Math.max(1, Math.min(nextPage, pageCount));
+    const boundedPage = Math.max(1, Math.min(nextPage, visibleCount));
+    direction.current = boundedPage >= pageNumber ? "next" : "prev";
+    if (boundedPage >= initialPageLimit) setIsExpanded(true);
     setPageNumber(Math.floor((boundedPage - 1) / pagesPerSpread) * pagesPerSpread + 1);
   }
 
@@ -322,6 +339,9 @@ export default function PdfCatalogGallery({ brand, file, label }) {
       aria-label={`${brand} catalog page gallery`}
       tabIndex={0}
       onKeyDown={handleGalleryKeyDown}
+      onPointerEnter={expand}
+      onTouchStart={expand}
+      onFocus={expand}
     >
       <div
         className="pdf-slide"
@@ -337,7 +357,7 @@ export default function PdfCatalogGallery({ brand, file, label }) {
       >
         <span className="pdf-gallery-brand">{brand}{label ? <em>{label}</em> : null}</span>
         {loadState === "loaded" && pdf ? (
-          <div className="pdf-spread-grid" aria-label={`Page ${pageNumber}`}>
+          <div className="pdf-spread-grid" data-direction={direction.current} aria-label={`Page ${pageNumber}`}>
             {Array.from(
               { length: Math.min(pagesPerSpread, pageCount - pageNumber + 1) },
               (_, index) => {
@@ -395,13 +415,13 @@ export default function PdfCatalogGallery({ brand, file, label }) {
               className="pdf-page-arrow is-next"
               type="button"
               aria-label="Next page"
-              disabled={pageNumber + pagesPerSpread > pageCount}
+              disabled={pageNumber + pagesPerSpread > visibleCount}
               onClick={() => showPage(pageNumber + pagesPerSpread)}
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
             </button>
             <span className="pdf-page-count" aria-live="polite">
-              Page <strong>{pageNumber}</strong> of {pageCount}
+              Page <strong>{pageNumber}</strong> of {visibleCount}
             </span>
           </>
         )}
@@ -427,12 +447,14 @@ export default function PdfCatalogGallery({ brand, file, label }) {
             </div>
           </div>
           <div className="pdf-lightbox-stage" onClick={() => setIsZoomOpen(false)}>
-            <PdfPageCanvas pdf={pdf} pageNumber={pageNumber} variant="lightbox" zoom={zoom} />
+            <div className="pdf-lightbox-page">
+              <PdfPageCanvas pdf={pdf} pageNumber={pageNumber} variant="lightbox" zoom={zoom} />
+            </div>
           </div>
           <button className="pdf-page-arrow is-prev" type="button" aria-label="Previous page" disabled={pageNumber <= 1} onClick={() => changePage(pageNumber - pagesPerSpread)}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
-          <button className="pdf-page-arrow is-next" type="button" aria-label="Next page" disabled={pageNumber + pagesPerSpread > pageCount} onClick={() => changePage(pageNumber + pagesPerSpread)}>
+          <button className="pdf-page-arrow is-next" type="button" aria-label="Next page" disabled={pageNumber + pagesPerSpread > visibleCount} onClick={() => changePage(pageNumber + pagesPerSpread)}>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>,
@@ -441,7 +463,7 @@ export default function PdfCatalogGallery({ brand, file, label }) {
 
       {loadState === "loaded" && pdf && (
         <div className="pdf-thumbnail-track" ref={trackRef} aria-label="Catalog page thumbnails">
-          {Array.from({ length: pageCount }, (_, index) => {
+          {Array.from({ length: visibleCount }, (_, index) => {
             const thumbnailPage = index + 1;
 
             return (

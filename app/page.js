@@ -1,4 +1,5 @@
 import Catalog from "./catalog";
+import ContactSection from "./contact-section";
 import NavMenu from "./nav-menu";
 
 function Icon({ name }) {
@@ -74,7 +75,9 @@ export default function Home() {
 
       <Catalog />
 
-      <footer className="footer" id="contact">
+      <ContactSection />
+
+      <footer className="footer">
         <div className="footer-top">
           <a className="footer-link" href="#home">Back to top <span aria-hidden="true">↑</span></a>
         </div>
