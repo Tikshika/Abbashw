@@ -1,12 +1,12 @@
 // Placeholder business details; replace with the real data.
 export const siteConfig = {
   contact: {
-    contactPerson: "Contact Person Name",
+    contactPerson: "S. Mohamed riyas (CEO)",
     businessName: "Abbas Hardware",
-    address: ["Door No. 00, Street Name", "Area, Chennai", "Tamil Nadu - 600000"],
-    phone: "+91 00000 00000",
-    email: "info@example.com",
-    hours: "Mon - Sat: 9:30 AM - 8:00 PM"
+    address: ["Door No. 92/10, Jawaharlal Nehru Main Road, 100 Feet Road", "Vadapalani, Chennai", "Tamil Nadu - 600026"],
+    phone: "+91 80721 39638 / 70921 23070",
+    email: "abbashardware2017@gmail.com",
+    hours: "Mon - Sun: 9:00 AM - 9:00 PM"
   },
   map: {
     latitude: 13.0547913,
