@@ -67,10 +67,24 @@ export default function Home() {
           <p className="eyebrow">Abbas Hardware</p>
           <h2>Make every detail<br /><span>work beautifully.</span></h2>
         </div>
-        <p>
-          Discover dependable hardware, thoughtful fittings, and everyday essentials
-          chosen to help bring your next project together.
-        </p>
+        <div className="about-copy">
+          <p>
+            <strong>Abbas Hardware</strong> is a trusted destination for quality hardware, architectural
+            fittings and interior hardware solutions in Chennai. We offer a wide range of products for
+            homes, offices, commercial spaces, interior projects and general hardware requirements.
+          </p>
+          <p>
+            Our product range includes <strong>door locks, door handles, hinges, stoppers, cabinet and
+            furniture fittings, bathroom fittings, fasteners, tools and other essential hardware
+            products</strong> from reputed brands.
+          </p>
+          <p>
+            We understand that choosing the right hardware is important for both <strong>functionality
+            and appearance</strong>. That is why we focus on providing customers with a good selection of
+            products, competitive pricing and practical assistance in choosing the right product for
+            their requirements.
+          </p>
+        </div>
       </section>
 
       <Catalog />

@@ -328,12 +328,19 @@ h2 span {
   color: var(--navy-light);
 }
 
-.about-strip > p {
-  max-width: 480px;
-  margin: 0;
+.about-copy {
+  max-width: 520px;
+}
+
+.about-copy p {
+  margin: 0 0 14px;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.9;
+}
+
+.about-copy strong {
+  color: var(--ink);
 }
 
 .catalog-section {
@@ -1100,7 +1107,7 @@ h2 span {
     gap: 22px;
   }
 
-  .about-strip > p {
+  .about-copy p {
     font-size: 14px;
   }
 
