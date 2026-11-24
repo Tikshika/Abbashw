@@ -111,7 +111,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="copyright">© 2026 Tikshika. All rights reserved.</div>
+        <div className="copyright">© 2026 Abbas Hardware. All rights reserved.</div>
       </footer>
     </main>
   );
